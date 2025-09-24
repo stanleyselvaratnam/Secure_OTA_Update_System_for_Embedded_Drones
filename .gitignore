@@ -1,0 +1,23 @@
+# Yocto build output
+build/
+sstate-cache/
+downloads/
+tmp/
+cache/
+
+# Logs and sockets
+*.log
+*.sock
+
+# BitBake artifacts
+bitbake.lock
+hashserve.sock
+
+# Editor / OS specific
+*.swp
+*.swo
+.DS_Store
+
+# Ignore poky + meta-openembedded sources if cloned by kas
+poky/
+meta-openembedded/

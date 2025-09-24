@@ -1,32 +1,44 @@
 header:
   version: 11
 
+# Définition des dépôts à cloner et des layers à activer
 repos:
   poky:
-    path: "./poky"
+    url: "https://git.yoctoproject.org/poky.git"
+    refspec: "scarthgap"
     layers:
       meta:
       meta-poky:
       meta-yocto-bsp:
 
   meta-openembedded:
-    url: "https://github.com/openembedded/meta-openembedded.git"
-    branch: "scarthgap"
+    url: "https://git.openembedded.org/meta-openembedded"
+    refspec: "scarthgap"
     layers:
       meta-oe:
       meta-networking:
       meta-python:
 
-  meta-my-layer:
-    path: "./meta-my-layer"
-    layers:
-      .:
 
-machine: "genericarm64"
+ 
+# Configuration de la build
+build_system: oe
 
-target:
-  - core-image-minimal
+target: core-image-base
 
-env:
-  BB_NUMBER_THREADS: "4"
-  PARALLEL_MAKE: "-j4"
+machine: genericarm64
+
+distro: poky
+
+# Variables injectées dans conf/local.conf
+local_conf_header:
+  my-config: |
+    PACKAGE_CLASSES ?= "package_rpm"
+    EXTRA_IMAGE_FEATURES ?= "debug-tweaks ssh-server-openssh"
+    IMAGE_INSTALL:append = " htop vim"
+    # Activer le support de GPU pour RPi
+    RPI_USE_U_BOOT = "1"
+    # Limiter la mémoire utilisée via parallélisme
+    BB_NUMBER_THREADS = "10"
+    PARALLEL_MAKE = "-j 10"
+
