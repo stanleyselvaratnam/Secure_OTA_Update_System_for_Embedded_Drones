@@ -18,5 +18,4 @@ hashserve.sock
 .DS_Store
 
 # Si tu ne veux pas versionner Poky / OE (recommandé)
-meta-openembedded/
 EOF

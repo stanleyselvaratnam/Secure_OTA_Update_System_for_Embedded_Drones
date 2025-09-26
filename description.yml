@@ -18,7 +18,14 @@ repos:
       meta-oe:
       meta-networking:
       meta-python:
- 
+  
+  meta-mender:
+    url: "https://github.com/mendersoftware/meta-mender.git"
+    refspec: "scarthgap"
+    layers:
+      meta-mender-core:
+      meta-mender-demo:
+
 # Configuration de la build
 build_system: oe
 
@@ -47,6 +54,14 @@ local_conf_header:
     IMAGE_BOOT_FILES = "u-boot.bin"
     IMAGE_CLASSES = ""
     PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
+
+    # Configuration Mender (exemple générique ARM64)
+    MENDER_ARTIFACT_NAME = "release-1"
+    MENDER_SERVER_URL = "https://eu.hosted.mender.io"
+    MENDER_TENANT_TOKEN = "AVi5j0YkJYNeYRamqwzY2r9WRz3sJo5nbGDGaE0uXtQ"
+    IMAGE_INSTALL:append = " mender-client"
+    # Ajoute pour le partitionnement GPT si besoin
+    MENDER_STORAGE_TOTAL_SIZE_MB = "4096"
     
     # Limiter la mémoire utilisée via parallélisme
     BB_NUMBER_THREADS = "10"
