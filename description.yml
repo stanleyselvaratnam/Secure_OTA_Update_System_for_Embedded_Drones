@@ -24,14 +24,13 @@ repos:
     refspec: "scarthgap"
     layers:
       meta-mender-core:
-      meta-mender-demo:
 
 # Configuration de la build
 build_system: oe
 
 target:
   - u-boot
-  - core-image-base
+  - core-image-minimal
 
 machine: genericarm64
 
@@ -40,13 +39,24 @@ distro: poky
 # Variables injectées dans conf/local.conf
 local_conf_header:
   my-config: |
+
+    INHERIT += "mender-full-ubi"
+    MENDER_MTDIDS = "nand0=spi0.0"
+
     PACKAGE_CLASSES ?= "package_rpm"
     EXTRA_IMAGE_FEATURES ?= "debug-tweaks ssh-server-openssh"
-    IMAGE_INSTALL:append = " htop vim"
 
+    IMAGE_INSTALL:append = " htop vim mender"
 
-    # Activer le support de GPU pour RPi
-    RPI_USE_U_BOOT = "1"
+    # BBMASK += "recipes-mender/mender-client/mender-client_3.5.*.bb"
+    # BBMASK += "recipes-mender/mender-client/mender-client_git.bb"
+
+    PREFERRED_VERSION_mender = "5.0.2"
+    PREFERRED_PROVIDER_mender = "mender"
+
+    KERNEL_DEVICETREE = "generic-arm64-qemu.dtb"
+
+    INIT_MANAGER = "systemd"
 
     # Ajout du bootloader
     IMAGE_INSTALL:remove = "grub"
@@ -54,15 +64,34 @@ local_conf_header:
     IMAGE_BOOT_FILES = "u-boot.bin"
     IMAGE_CLASSES = ""
     PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
+    # PREFERRED_PROVIDER_virtual/kernel = "linux-yocto"
 
     # Configuration Mender (exemple générique ARM64)
     MENDER_ARTIFACT_NAME = "release-1"
     MENDER_SERVER_URL = "https://eu.hosted.mender.io"
     MENDER_TENANT_TOKEN = "AVi5j0YkJYNeYRamqwzY2r9WRz3sJo5nbGDGaE0uXtQ"
-    IMAGE_INSTALL:append = " mender-client"
-    # Ajoute pour le partitionnement GPT si besoin
-    MENDER_STORAGE_TOTAL_SIZE_MB = "4096"
+    MENDER_DEVICE_TYPE = "genericarm64"
+
+    # Configuration du partitionnement Mender conseillé
+    # Taille totale du support (en MiB)
+    MENDER_STORAGE_TOTAL_SIZE_MB = "4096"        
+    # Taille de la partition Bootloader
+    MENDER_BOOT_PART_SIZE_MB = "16"              
+    # Taille minimale de partition data (agrandie au 1er boot)
+    MENDER_DATA_PART_SIZE_MB = "128"   
+    # Active l'automatisation U-Boot pour le partitionnement
+    MENDER_UBOOT_AUTO_CONFIGURE = "1"           
+
+    HOSTCC = "gcc"
+
     
+    IMAGE_INSTALL:append = " ca-certificates"
+    
+
+    # Pour l'emulateur
+    # Set à la bonne heure (évite les problèmes avec CA-certificates)
+    IMAGE_INSTALL:append = " rtc-tools"
+
     # Limiter la mémoire utilisée via parallélisme
     BB_NUMBER_THREADS = "10"
     PARALLEL_MAKE = "-j 10"
