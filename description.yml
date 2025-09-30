@@ -29,6 +29,7 @@ repos:
     path: "meta-my-layer"
     layers:
       meta-local:
+      meta-wic:
 # Configuration de la build
 build_system: oe
 
@@ -67,13 +68,13 @@ local_conf_header:
 
     INIT_MANAGER = "systemd"
 
-    # WKS_FILE = "core-image-minimal.wks"
-    # IMAGE_FSTYPES += "wic"
+    WKS_FILE = "core-image-minimal.wks"
+    IMAGE_FSTYPES += "wic"
 
     # # Ajout du bootloader
     # IMAGE_INSTALL:remove = "grub"
     # UBOOT_MACHINE = "qemu_arm64_defconfig"
-    # IMAGE_BOOT_FILES = "u-boot.bin"
+    IMAGE_BOOT_FILES = "u-boot.bin"
     # IMAGE_CLASSES = ""
     # PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
     # PREFERRED_PROVIDER_virtual/kernel = "linux-yocto"

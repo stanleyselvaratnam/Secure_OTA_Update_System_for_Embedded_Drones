@@ -1,4 +1,0 @@
-part /boot --source bootimg-partition --ondisk vda --fstype=vfat --label boot --active --size 64
-part / --ondisk vda --fstype=ext4 --label rootfsA --size 256
-part / --ondisk vda --fstype=ext4 --label rootfsB --size 256
-part /data --ondisk vda --fstype=ext4 --label data --size 64

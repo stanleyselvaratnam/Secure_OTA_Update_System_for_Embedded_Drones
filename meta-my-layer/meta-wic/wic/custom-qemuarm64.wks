@@ -1,0 +1,14 @@
+# core-image-minimal-qemuarm64.wks
+# Partition table Mender pour QEMU ARM64
+
+# Partition Boot (U-Boot)
+part /boot --source bootimg-partition --ondisk vda --fstype=vfat --label boot --active --size 16
+
+# Rootfs A (active)
+part / --source rootfs --ondisk vda --fstype=ext4 --label rootfs1 --size 1945
+
+# Rootfs B (inactive)
+part / --source rootfs --ondisk vda --fstype=ext4 --label rootfs2 --size 1945
+
+# Data partition pour Mender
+part /data --ondisk vda --fstype=ext4 --label data --size 128
