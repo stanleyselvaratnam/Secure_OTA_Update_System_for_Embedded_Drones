@@ -29,7 +29,7 @@ repos:
     path: "meta-my-layer"
     layers:
       meta-local:
-      meta-wic:
+      # meta-wic:
 # Configuration de la build
 build_system: oe
 
@@ -45,65 +45,110 @@ distro: poky
 local_conf_header:
   my-config: |
 
+    # ================================================================
+    # Local configuration for building core-image-minimal with Mender
+    # ================================================================
+
+    # Inherit the full Mender integration layer
     INHERIT += "mender-full"
-    # MENDER_MTDIDS = "dummy=none"
 
+    # ================================================================
+    # Package management and image features
+    # ================================================================
 
-    # PACKAGE_CLASSES ?= "package_rpm"
+    # Use IPK as package format
+    PACKAGE_CLASSES ?= "package_ipk"
+
+    # Extra image features: debugging tools and SSH server
     EXTRA_IMAGE_FEATURES ?= "debug-tweaks ssh-server-openssh"
 
-    # IMAGE_INSTALL:append = " htop vim"
-    # # IMAGE_INSTALL:append = " mender"
-    # # IMAGE_INSTALL:append = " mender-auth mender-update"
+    # Packages to include in the image
+    IMAGE_INSTALL:append = " htop vim ca-certificates"
 
-    # # BBMASK += "recipes-mender/mender-client/mender-client_3.5.*.bb"
-    # # BBMASK += "recipes-mender/mender-client/mender-client_git.bb"
+    # ================================================================
+    # Bootloader configuration
+    # ================================================================
 
-    # # PREFERRED_VERSION_mender = "5.0.2"
-    # # PREFERRED_PROVIDER_mender = "mender"
+    # U-Boot bootloader files to include in image
+    IMAGE_BOOT_FILES = "u-boot.bin"
 
-    # # DEBUG_PREFIX_MAP:remove = "-fcanon-prefix-map"
-
-    # KERNEL_DEVICETREE = "qemu.dtb"
-
+    # Init system to use
     INIT_MANAGER = "systemd"
 
-    WKS_FILE = "core-image-minimal.wks"
-    IMAGE_FSTYPES += "wic"
+    # ================================================================
+    # Image types
+    # ================================================================
 
-    # # Ajout du bootloader
+    # Build SD card image
+    IMAGE_FSTYPES += "sdimg"
+
+    # ================================================================
+    # Mender configuration
+    # ================================================================
+
+    # Name of the Mender artifact
+    MENDER_ARTIFACT_NAME = "release-1"
+
+    # Mender server URL and tenant token
+    MENDER_SERVER_URL = "https://eu.hosted.mender.io"
+    MENDER_TENANT_TOKEN = "AVi5j0YkJYNeYRamqwzY2r9WRz3sJo5nbGDGaE0uXtQ"
+
+    # Device type
+    MENDER_DEVICE_TYPE = "qemuarm64"
+
+    # Storage device and partition layout
+    MENDER_STORAGE_DEVICE = "/dev/vda"
+    MENDER_STORAGE_TOTAL_SIZE_MB = "4096"
+    MENDER_BOOT_PART_SIZE_MB = "16"
+    MENDER_DATA_PART_SIZE_MB = "128"
+
+    # Enable automatic U-Boot configuration for partitions
+    MENDER_UBOOT_AUTO_CONFIGURE = "1"
+
+    # Polling intervals (empty = default)
+    MENDER_UPDATE_POLL_INTERVAL_SECONDS = ""
+    MENDER_INVENTORY_POLL_INTERVAL_SECONDS = ""
+    MENDER_RETRY_POLL_INTERVAL_SECONDS = ""
+
+    # ================================================================
+    # Build performance tuning
+    # ================================================================
+
+    # Limit the number of parallel tasks to avoid memory issues
+    BB_NUMBER_THREADS = "10"
+    PARALLEL_MAKE = "-j 10"
+
+    # ================================================================
+    # Experimental / commented options
+    # ================================================================
+
+    # Uncomment to include Mender packages (if using RPM or testing)
+    # IMAGE_INSTALL:append = " mender-client mender-auth mender-update"
+
+    # BBMASK examples (to exclude certain recipes)
+    # BBMASK += "recipes-mender/mender-client/mender-client_3.5.*.bb"
+    # BBMASK += "recipes-mender/mender-client/mender-client_git.bb"
+
+    # Force specific Mender version or provider
+    # PREFERRED_VERSION_mender = "5.0.2"
+    # PREFERRED_PROVIDER_mender = "mender"
+
+    # Debug prefix map removal
+    # DEBUG_PREFIX_MAP:remove = "-fcanon-prefix-map"
+
+    # Kernel device tree configuration
+    # KERNEL_DEVICETREE = "qemu.dtb"
+
+    # WIC image configuration
+    # WKS_FILE = "core-image-minimal.wks"
+    # IMAGE_FSTYPES += "wic"
+
+    # Bootloader and kernel preferences
     # IMAGE_INSTALL:remove = "grub"
     # UBOOT_MACHINE = "qemu_arm64_defconfig"
-    IMAGE_BOOT_FILES = "u-boot.bin"
     # IMAGE_CLASSES = ""
     # PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
     # PREFERRED_PROVIDER_virtual/kernel = "linux-yocto"
 
-    # Configuration Mender (exemple générique ARM64)
-    MENDER_ARTIFACT_NAME = "release-1"
-    MENDER_SERVER_URL = "https://eu.hosted.mender.io"
-    MENDER_TENANT_TOKEN = "AVi5j0YkJYNeYRamqwzY2r9WRz3sJo5nbGDGaE0uXtQ"
-    MENDER_DEVICE_TYPE = "qemuarm64"
-
-    # Configuration du partitionnement Mender conseillé
-    MENDER_STORAGE_DEVICE = "/dev/vda"
-    # Taille totale du support (en MiB)
-    MENDER_STORAGE_TOTAL_SIZE_MB = "4096"        
-    # Taille de la partition Bootloader
-    MENDER_BOOT_PART_SIZE_MB = "16"              
-    # Taille minimale de partition data (agrandie au 1er boot)
-    MENDER_DATA_PART_SIZE_MB = "128"   
-    # Active l'automatisation U-Boot pour le partitionnement
-    MENDER_UBOOT_AUTO_CONFIGURE = "1"           
-    
-    IMAGE_INSTALL:append = " ca-certificates"
-    
-
-    # # Pour l'emulateur
-    # # Set à la bonne heure (évite les problèmes avec CA-certificates)
+    # Emulator / RTC tools
     # IMAGE_INSTALL:append = " rtc-tools"
-
-
-    # Limiter la mémoire utilisée via parallélisme
-    BB_NUMBER_THREADS = "10"
-    PARALLEL_MAKE = "-j 10"
