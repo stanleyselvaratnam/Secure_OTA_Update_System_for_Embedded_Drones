@@ -4,6 +4,7 @@ sstate-cache/
 downloads/
 tmp/
 cache/
+mender-keys/private.key
 !meta-my-layer/
 
 # Bitbake/daemon artefacts

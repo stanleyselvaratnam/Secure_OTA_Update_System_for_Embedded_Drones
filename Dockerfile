@@ -7,7 +7,8 @@ FROM crops/yocto:ubuntu-22.04-base
 USER root
 
 RUN apt-get update && apt-get install -y \
-kas 
+kas \
+mender-artifact
 
 ADD https://raw.githubusercontent.com/crops/extsdk-container/master/restrict_useradd.sh  \
         https://raw.githubusercontent.com/crops/extsdk-container/master/restrict_groupadd.sh \
