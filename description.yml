@@ -68,7 +68,7 @@ distro: poky
 local_conf_header:
   my-config: |
 
-    # TODO : test the rollback
+    # TODO : test the rollback, partition the kernel, double authentification
     # * ================================================================
     # * Local configuration for building core-image-minimal with Mender
     # * ================================================================
@@ -119,13 +119,16 @@ local_conf_header:
     # Build SD card image
     IMAGE_FSTYPES += "sdimg"
 
+    # * ================================================================
+    # * Partition with WKS (meta-wic)
+    # * ================================================================
 
     # ! WIC image configuration
-    WKS_FILE = "custom-qemuarm64.wks"
+    WKS_FILE = "custom-qemuarm64.wks.in"
     IMAGE_FSTYPES += "wic wic.bz2"
 
     # * ================================================================
-    # * Mender configuration
+    # * Mender configuration (meta-mender-core)
     # * ================================================================
 
     # Name of the Mender artifact
@@ -166,7 +169,7 @@ local_conf_header:
 
     IMAGE_INSTALL:append = " mender-artifact-info"
     # ! ================================================================
-    # ! Test Rollback
+    # ! Test Rollback (meta-rollback)
     # ! ================================================================
 
     # ! Only to test the rollback
