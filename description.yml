@@ -21,11 +21,11 @@ repos:
       meta-networking:
       meta-python:
 
-  meta-community:
-    url: "https://github.com/mendersoftware/meta-mender-community.git"
-    refspec: "scarthgap"
-    layers:
-      meta-mender-update-modules:
+  # meta-community:
+  #   url: "https://github.com/mendersoftware/meta-mender-community.git"
+  #   refspec: "scarthgap"
+  #   layers:
+  #     meta-mender-update-modules:
   
   meta-mender:
     url: "https://github.com/mendersoftware/meta-mender.git"
@@ -41,7 +41,7 @@ repos:
   # meta-mender-kernel:
   #   url: "https://github.com/coreycothrum/meta-mender-kernel.git"
   #   refspec: "scarthgap"
-  meta-raspberry:
+  meta-raspberrypi:
     url: "https://git.yoctoproject.org/git/meta-raspberrypi"
     refspec: "scarthgap"
 
