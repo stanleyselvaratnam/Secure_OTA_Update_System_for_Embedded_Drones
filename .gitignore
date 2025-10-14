@@ -1,6 +1,6 @@
 # Yocto/Kas build output
 build/
-build-rpi/
+build-rpi4/
 sstate-cache/
 downloads/
 tmp/
