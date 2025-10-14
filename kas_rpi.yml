@@ -21,11 +21,12 @@ repos:
       meta-networking:
       meta-python:
 
-  # meta-community:
-  #   url: "https://github.com/mendersoftware/meta-mender-community.git"
-  #   refspec: "scarthgap"
-  #   layers:
-  #     meta-mender-update-modules:
+  meta-community:
+    url: "https://github.com/mendersoftware/meta-mender-community.git"
+    refspec: "scarthgap"
+    layers:
+      meta-mender-raspberrypi:
+      # meta-mender-update-modules:
   
   meta-mender:
     url: "https://github.com/mendersoftware/meta-mender.git"
@@ -34,16 +35,14 @@ repos:
     layers:
       meta-mender-core:
 
-  # meta-bitbake-variable-substitution:
-  #   url: "https://github.com/coreycothrum/meta-bitbake-variable-substitution.git"
-  #   refspec: "master"
-
-  # meta-mender-kernel:
-  #   url: "https://github.com/coreycothrum/meta-mender-kernel.git"
-  #   refspec: "scarthgap"
   meta-raspberrypi:
-    url: "https://git.yoctoproject.org/git/meta-raspberrypi"
-    refspec: "scarthgap"
+    url: https://github.com/agherzan/meta-raspberrypi.git
+    refspec: 1091bde25e9ebaea33114edb85e4aee931d105f3
+
+  meta-lts-mixins:
+    url: https://git.yoctoproject.org/meta-lts-mixins
+    refspec: a44882db02a0ed0f149371831bfbe067665eb42b
+
 
   meta-custom:
     url: "https://github.com/stanleyselvaratnam/meta-custom.git"
@@ -68,9 +67,14 @@ target:
   - u-boot
   - core-image-minimal
 
-machine: qemuarm64
+machine: raspberrypi4-64
 
 distro: poky
+
+# Isole les caches par machine
+env:
+  SSTATE_DIR: "/workdir/build/sstate-${MACHINE}"
+
 
 # Variables injectées dans conf/local.conf
 local_conf_header:
@@ -103,7 +107,9 @@ local_conf_header:
     # * ================================================================
 
     # U-Boot bootloader files to include in image
-    UBOOT_MACHINE = "qemu_arm64_defconfig"
+    # ! UBOOT_MACHINE = "qemu_arm64_defconfig"
+    UBOOT_MACHINE = "raspberrypi4_64_defconfig"
+
     IMAGE_BOOT_FILES = "u-boot.bin"
 
     # Init system to use
@@ -119,6 +125,12 @@ local_conf_header:
 
     # # Disable EFI-related packages if any
     # # IMAGE_INSTALL:remove = "efi-utils"
+
+    # * ================================================================
+    # * ENABLE UART
+    # * ================================================================
+
+    ENABLE_UART = "1"
 
     # * ================================================================
     # * Image types
@@ -147,10 +159,12 @@ local_conf_header:
     MENDER_TENANT_TOKEN = "AVi5j0YkJYNeYRamqwzY2r9WRz3sJo5nbGDGaE0uXtQ"
 
     # Device type
-    MENDER_DEVICE_TYPE = "qemuarm64"
+    # ! MENDER_DEVICE_TYPE = "qemuarm64"
+    MENDER_DEVICE_TYPE = "raspberrypi4-64"
 
     # Storage device and partition layout
-    MENDER_STORAGE_DEVICE = "/dev/vda"
+    # ! MENDER_STORAGE_DEVICE = "/dev/vda"
+    MENDER_STORAGE_DEVICE = "/dev/mmcblk0"
     MENDER_STORAGE_TOTAL_SIZE_MB = "4096"
     MENDER_BOOT_PART_SIZE_MB = "16"
     MENDER_DATA_PART_SIZE_MB = "128"
