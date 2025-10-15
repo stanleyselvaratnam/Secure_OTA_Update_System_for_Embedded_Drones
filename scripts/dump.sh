@@ -1,12 +1,16 @@
-#/bin/bash
-sudo kpartx -av ../build/tmp/deploy/images/raspberrypi4-64/core-image-minimal-raspberrypi4-64.sdimg
+#!/bin/bash
 
-sudo umount /mnt
-sudo mount /dev/mapper/loop0p1 /mnt && ls /mnt && sudo umount /mnt
-sudo mount /dev/mapper/loop0p2 /mnt && ls /mnt && sudo umount /mnt
-sudo mount /dev/mapper/loop0p3 /mnt && ls /mnt && sudo umount /mnt
-sudo mount /dev/mapper/loop0p4 /mnt && ls /mnt && sudo umount /mnt
-# sudo mount /dev/mapper/loop0p5 /mnt && ls /mnt && sudo umount /mnt
-# sudo mount /dev/mapper/loop0p6 /mnt && ls /mnt && sudo umount /mnt
+# Ajouter les partitions de l'image
+sudo kpartx -av ../build-rpi4/tmp/deploy/images/raspberrypi4-64/core-image-minimal-raspberrypi4-64.sdimg
 
+# Monter chaque partition et lister son contenu
+for part in /dev/mapper/loop0p*; do
+    echo "=== Partition $part ==="
+    sudo mount "$part" /mnt
+    ls /mnt
+    sudo umount /mnt
+done
+
+# Supprimer les mappings des partitions
 sudo kpartx -d /dev/loop0
+sudo losetup -d /dev/loop0
