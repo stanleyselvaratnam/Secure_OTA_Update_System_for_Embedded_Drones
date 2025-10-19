@@ -39,7 +39,7 @@ repos:
     url: https://github.com/agherzan/meta-raspberrypi.git
     refspec: 1091bde25e9ebaea33114edb85e4aee931d105f3
 
-  meta-lts-mixins:
+  meta-lts-mixins-uboot:
     url: https://git.yoctoproject.org/meta-lts-mixins
     refspec: "scarthgap/u-boot"
     path: "meta-lts-mixins"
@@ -147,17 +147,6 @@ local_conf_header:
     # * ENABLE WIFI
     # * ================================================================
 
-    # IMAGE_INSTALL:append = " wpa-supplicant iw"
-    # IMAGE_INSTALL:append = " firmware-brcm80211"
-
-    # RPI_KERNEL_MODULE_AUTOLOAD += "brcmfmac cfg80211"
-
-
-
-    # IMAGE_INSTALL:append = " brcmfmac-firmware networkmanager-autoconnect networkmanager"
-
-    # IMAGE_INSTALL:append = " kernel-module-brcmfmac kernel-module-cfg80211"
-
     DISTRO_FEATURES:append = " wifi"
 
     IMAGE_INSTALL:append = " linux-firmware-rpidistro-bcm43455 i2c-tools bridge-utils hostapd iptables dhcpcd wpa-supplicant-wifi iw"
@@ -183,7 +172,7 @@ local_conf_header:
     # * ================================================================
 
     # Name of the Mender artifact
-    MENDER_ARTIFACT_NAME = "release-7"
+    MENDER_ARTIFACT_NAME = "release-1"
 
     # Mender server URL and tenant token
     MENDER_SERVER_URL = "https://eu.hosted.mender.io"
@@ -265,3 +254,14 @@ local_conf_header:
 
     # Emulator / RTC tools
     # IMAGE_INSTALL:append = " rtc-tools"
+
+    # IMAGE_INSTALL:append = " wpa-supplicant iw"
+    # IMAGE_INSTALL:append = " firmware-brcm80211"
+
+    # RPI_KERNEL_MODULE_AUTOLOAD += "brcmfmac cfg80211"
+
+
+
+    # IMAGE_INSTALL:append = " brcmfmac-firmware networkmanager-autoconnect networkmanager"
+
+    # IMAGE_INSTALL:append = " kernel-module-brcmfmac kernel-module-cfg80211"
