@@ -1,0 +1,192 @@
+#!/bin/sh
+
+set -e
+
+# ===============================================================
+# Script: kernel-artifact-gen
+# Purpose: Generate a Mender Artifact for updating the boot kernel (Image)
+# Platform: Yocto + Mender (general-purpose)
+# Author : Stanley Selvaratnam
+# ===============================================================
+
+show_help() {
+  cat << EOF
+
+Simple tool to generate a Mender Artifact suitable for a kernel/boot image Update Module.
+
+Usage: $0 [options] file [-- [options-for-mender-artifact] ]
+
+Options:
+  -n, --artifact-name       Artifact name
+  -t, --device-type         Target device type (can be used multiple times)
+  -d, --dest-dir            Target directory where to deploy the kernel (default: /boot)
+  --software-name           Software name key (default: rootfs-image.kernel.version)
+  --software-version        Software version value (default: same as artifact name)
+  --software-filesystem     Use instead of rootfs-image
+  -o, --output-path         Path to output file (default: kernel-update.mender)
+  -h, --help                Show this help and exit
+  file                      Kernel/boot image file to bundle in the update
+
+Anything after a '--' is passed directly to the mender-artifact tool.
+
+Example:
+  $0 -n kernel-update-v1 -t my-device -d /boot -o kernel-update-v1.mender ./Image
+
+EOF
+}
+
+show_help_and_exit_error() {
+  show_help
+  exit 1
+}
+
+check_dependency() {
+  if ! which "$1" > /dev/null; then
+    echo "The $1 utility is required to generate Mender Artifacts." 1>&2
+    return 1
+  fi
+}
+
+if ! check_dependency mender-artifact; then
+  echo "Please install mender-artifact: https://docs.mender.io/downloads#mender-artifact" 1>&2
+  exit 1
+fi
+
+device_types=""
+artifact_name=""
+dest_dir="/boot"
+output_path="kernel-update.mender"
+file=""
+passthrough_args=""
+
+# --- Parse command line arguments ---
+while [ -n "$1" ]; do
+  case "$1" in
+    --device-type | -t)
+      [ -z "$2" ] && show_help_and_exit_error
+      device_types="$device_types $1 $2"
+      shift 2
+      ;;
+    --artifact-name | -n)
+      [ -z "$2" ] && show_help_and_exit_error
+      artifact_name=$2
+      shift 2
+      ;;
+    --dest-dir | -d)
+      [ -z "$2" ] && show_help_and_exit_error
+      dest_dir=$2
+      shift 2
+      ;;
+    --software-name | --software-version | --software-filesystem)
+      [ -z "$2" ] && show_help_and_exit_error
+      passthrough_args="$passthrough_args $1 $2"
+      shift 2
+      ;;
+    --output-path | -o)
+      [ -z "$2" ] && show_help_and_exit_error
+      output_path=$2
+      shift 2
+      ;;
+    -h | --help)
+      show_help
+      exit 0
+      ;;
+    --)
+      shift
+      passthrough_args="$passthrough_args $@"
+      break
+      ;;
+    -*)
+      echo "Error: Unsupported option $1"
+      show_help_and_exit_error
+      ;;
+    *)
+      if [ -n "$file" ]; then
+        echo "File already specified. Unrecognized argument \"$1\""
+        show_help_and_exit_error
+      fi
+      file="$1"
+      shift
+      ;;
+  esac
+done
+
+# --- Sanity checks ---
+if [ -z "${artifact_name}" ] || [ -z "${device_types}" ] || [ -z "${file}" ]; then
+  echo "Error: Missing required parameters."
+  show_help_and_exit_error
+fi
+
+if [ ! -f "${file}" ]; then
+  echo "Error: Kernel/boot image file '$file' does not exist."
+  exit 1
+fi
+
+# Check dest-dir is absolute
+case $dest_dir in
+  /*) ;;
+  *)
+    echo "Destination directory must be an absolute path. Aborting."
+    exit 1
+  ;;
+esac
+
+# --- Prepare module metadata ---
+filename=$(basename "$file")
+tmpdir=$(mktemp -d)
+dest_dir_file="$tmpdir/dest_dir"
+filename_file="$tmpdir/filename"
+permissions_file="$tmpdir/permissions"
+
+echo "$dest_dir" > "$dest_dir_file"
+echo "$filename" > "$filename_file"
+
+STAT_HAS_f=1
+stat -f %A "$file" >/dev/null 2>&1 || STAT_HAS_f=0
+if [ $STAT_HAS_f -eq 1 ]; then
+  stat -f %A "$file" > "$permissions_file"
+else
+  stat -c %a "$file" > "$permissions_file"
+fi
+
+# --- Handle passthrough arguments safely ---
+passthrough_args_modified=" "
+echo -n $passthrough_args | xargs -n 2 printf "%s %s\n" | (
+  while read -r flag arg; do
+    if [ -n "$flag" ]; then
+      case $flag in
+        -T | --type)
+          echo "Error: Conflicting flag '$flag'. Already specified by the script."
+          exit 1
+          ;;
+        -o | --output-path)
+          output_path=$arg
+          ;;
+        -n | --name)
+          artifact_name=$arg
+          ;;
+        *)
+          passthrough_args_modified="$passthrough_args_modified $flag $arg"
+          ;;
+      esac
+    fi
+  done
+
+  # --- Create the Mender Artifact ---
+  echo "Creating kernel/boot image update artifact..."
+  mender-artifact write module-image \
+    -T kernel \
+    $device_types \
+    -o "$output_path" \
+    -n "$artifact_name" \
+    -f "$dest_dir_file" \
+    -f "$filename_file" \
+    -f "$permissions_file" \
+    -f "$file" \
+    $passthrough_args_modified
+
+  echo "Artifact $output_path successfully generated:"
+  mender-artifact read "$output_path"
+)
+rm -rf "$tmpdir"
+exit 0
