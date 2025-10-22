@@ -104,9 +104,6 @@ local_conf_header:
     # Use IPK as package format
     PACKAGE_CLASSES ?= "package_ipk"
 
-    # Extra image features: debugging tools and SSH server
-    EXTRA_IMAGE_FEATURES ?= "debug-tweaks ssh-server-openssh"
-
     # Packages to include in the image
     IMAGE_INSTALL:append = " htop vim ca-certificates helloworld hellocustom"
 
@@ -153,6 +150,23 @@ local_conf_header:
     LICENSE_FLAGS_ACCEPTED += "synaptics-killswitch"
 
     # * ================================================================
+    # * ENABLE SSH
+    # * ================================================================
+
+    # Extra image features: debugging tools and SSH server
+    EXTRA_IMAGE_FEATURES ?= "ssh-server-openssh"
+    IMAGE_INSTALL:append = " ssh-keys"
+
+    INHERIT += "extrausers"
+    EXTRA_USERS_PARAMS = "usermod -p '$(openssl passwd -1 password123)' root;"
+
+    # * ================================================================
+    # * STATIC HOST MAPPING
+    # * ================================================================
+    
+    IMAGE_INSTALL:append = " hosts"
+
+    # * ================================================================
     # * Image types
     # * ================================================================
 
@@ -172,7 +186,7 @@ local_conf_header:
     # * ================================================================
 
     # Name of the Mender artifact
-    MENDER_ARTIFACT_NAME = "release-2"
+    MENDER_ARTIFACT_NAME = "release-1"
 
     # Mender server URL and tenant token
     # MENDER_SERVER_URL = "https://eu.hosted.mender.io"
