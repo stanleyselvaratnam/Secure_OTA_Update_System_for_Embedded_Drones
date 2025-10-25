@@ -1,0 +1,2 @@
+# Encrypted secure data partition
+/dev/mapper/securedata /mnt/securedata ext4 defaults,nofail 0 0
