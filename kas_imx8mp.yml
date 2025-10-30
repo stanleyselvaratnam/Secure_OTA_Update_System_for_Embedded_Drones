@@ -1,0 +1,158 @@
+# ! KAS_BUILD_DIR=build-imx8mp kas build kas_imx8mp.yml
+
+header:
+  version: 11
+
+# Définition des dépôts à cloner et des layers à activer
+repos:
+  poky:
+    url: "https://git.yoctoproject.org/poky.git"
+    refspec: "scarthgap"
+    layers:
+      meta:
+      meta-poky:
+      meta-yocto-bsp:
+
+  meta-openembedded:
+    url: "https://git.openembedded.org/meta-openembedded"
+    refspec: "scarthgap"
+    layers:
+      meta-oe:
+      meta-networking:
+      meta-python:
+  #     meta-multimedia:
+  #     meta-filesystems:
+
+  # meta-qt5:
+  #   url: "https://github.com/meta-qt5/meta-qt5.git"
+  #   refspec: "scarthgap"
+  
+  # meta-security:
+  #   url: "git://git.yoctoproject.org/meta-security"
+  #   refspec: "scarthgap"
+
+  # meta-freescale-distro:
+  #   url: "https://github.com/Freescale/meta-freescale-distro.git"
+  #   refspec: "scarthgap"
+
+
+  meta-freescale:
+    url: "https://github.com/Freescale/meta-freescale.git"
+    refspec: "scarthgap"
+
+  meta-freescale-3rdparty:
+      url: "https://github.com/Freescale/meta-freescale-3rdparty.git"
+      refspec: "scarthgap"
+
+  meta-toradex-bsp-common:
+    url: "https://git.toradex.com/meta-toradex-bsp-common.git"
+    refspec: "scarthgap-7.x.y"
+
+  meta-toradex-nxp:
+    url: "https://git.toradex.com/meta-toradex-nxp.git"
+    refspec: "scarthgap-7.x.y"
+  
+  meta-toradex-distro:
+    url: "https://git.toradex.com/meta-toradex-distro.git"
+    refspec: "scarthgap-7.x.y"
+
+  # meta-toradex-demos:
+  #   url: "https://git.toradex.com/cgit/meta-toradex-demos.git/"
+  #   refspec: "scarthgap-7.x.y"
+
+  # meta-toradex-security:
+  #   url: "https://github.com/toradex/meta-toradex-security.git"
+  #   refspec: "scarthgap-7.x.y"
+
+  meta-mender-community:
+    url: "https://github.com/mendersoftware/meta-mender-community.git"
+    refspec: "scarthgap"
+    layers:
+      meta-mender-nxp:
+      # meta-mender-update-modules:
+  
+  meta-mender:
+    url: "https://github.com/mendersoftware/meta-mender.git"
+    refspec: "scarthgap"
+    #commit: "bff4b64715aae33e5c3a0bf5c804e6a1f4726c1c"
+    layers:
+      meta-mender-core:
+
+  # meta-my-layer:
+  #   path: "meta-my-layer"
+  #   layers:
+  #     meta-wic:
+
+
+build_system: oe
+
+target:
+  - core-image-minimal
+
+machine: verdin-imx8mp
+
+distro: tdx-xwayland
+
+env:
+  SSTATE_DIR: "/workdir/build-sstate-${MACHINE}"
+
+local_conf_header:
+  my-config: |
+
+    INHERIT += "rm_work"
+    PACKAGE_CLASSES ?= "package_ipk"
+    INIT_MANAGER = "systemd"
+    IMAGE_FSTYPES += "ext4"
+    EXTRA_IMAGE_FEATURES = "debug-tweaks ssh-server-openssh"
+    IMAGE_INSTALL:append = " openssh-sftp-server vim"
+    ACCEPT_FSL_EULA = "1"
+
+    # Pas de Mender ici, kernel + dtb natifs pour imx8mp-evk QEMU
+    KERNEL_DEVICETREE = "imx8mp-evk.dtb"
+
+    
+    # IMAGE_CLASSES += "image_type_mender_tezi"
+    # IMAGE_FSTYPES:append = " mender_tezi"
+    # IMAGE_FSTYPES:remove = " teziimg"
+
+    IMAGE_FSTYPES += "wic"
+    # WKS_FILE = "custom-imx8mp-layout.wks"
+    # WIC_CREATE_EXTRA_ARGS = "-e core-image-minimal -f ${WKS_FILE}"
+
+    # * ================================================================
+    # * Mender configuration (meta-mender-core)
+    # * ================================================================
+
+    INHERIT += "mender-full"
+
+    # Name of the Mender artifact
+    MENDER_ARTIFACT_NAME = "release-test"
+
+    # Mender server URL and tenant token
+    # MENDER_SERVER_URL = "https://eu.hosted.mender.io"
+    # MENDER_SERVER_URL = ""
+    # MENDER_TENANT_TOKEN = "AVi5j0YkJYNeYRamqwzY2r9WRz3sJo5nbGDGaE0uXtQ"
+
+    # Device type
+    MENDER_DEVICE_TYPE = "imx8mp-verdin"
+
+    # Storage device and partition layout
+    MENDER_STORAGE_DEVICE = "/dev/mmcblk0"
+    MENDER_STORAGE_TOTAL_SIZE_MB = "4096"
+    MENDER_BOOT_PART_SIZE_MB = "100"
+    MENDER_DATA_PART_SIZE_MB = "128"
+
+    # # ! Enable automatic U-Boot configuration for partitions
+    # MENDER_UBOOT_AUTO_CONFIGURE = "1"
+
+    # # Polling intervals (empty = default)
+    # # MENDER_UPDATE_POLL_INTERVAL_SECONDS = ""
+    # # MENDER_INVENTORY_POLL_INTERVAL_SECONDS = ""
+    # # MENDER_RETRY_POLL_INTERVAL_SECONDS = ""
+
+   
+    # IMAGE_INSTALL:append = " mender-artifact-info"
+    IMAGE_BOOT_FILES:remove = "boot.scr"
+
+    # UBOOT_CONFIG ??= "sd"
+    # UBOOT_ENV ?= "u-boot-initial-env"

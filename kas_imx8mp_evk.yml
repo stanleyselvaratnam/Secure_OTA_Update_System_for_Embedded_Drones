@@ -1,0 +1,67 @@
+# ! KAS_BUILD_DIR=build-imx8mp-evk kas build kas_imx8mp_evk.yml
+
+header:
+  version: 11
+
+# Définition des dépôts à cloner et des layers à activer
+repos:
+  poky:
+    url: "https://git.yoctoproject.org/poky.git"
+    refspec: "scarthgap"
+    layers:
+      meta:
+      meta-poky:
+      meta-yocto-bsp:
+
+  meta-openembedded:
+    url: "https://git.openembedded.org/meta-openembedded"
+    refspec: "scarthgap"
+    layers:
+      meta-oe:
+      meta-networking:
+      meta-python:
+
+  meta-freescale:
+    url: "https://github.com/Freescale/meta-freescale.git"
+    refspec: "scarthgap"
+
+  meta-freescale-3rdparty:
+      url: "https://github.com/Freescale/meta-freescale-3rdparty.git"
+      refspec: "scarthgap"
+
+  meta-toradex-bsp-common:
+    url: "https://git.toradex.com/meta-toradex-bsp-common.git"
+    refspec: "scarthgap-7.x.y"
+
+  meta-toradex-nxp:
+    url: "https://git.toradex.com/meta-toradex-nxp.git"
+    refspec: "scarthgap-7.x.y"
+
+build_system: oe
+
+target:
+  - core-image-minimal
+
+machine: imx8mp-lpddr4-evk
+
+distro: poky
+
+env:
+  SSTATE_DIR: "/workdir/build-sstate-${MACHINE}"
+
+local_conf_header:
+  my-config: |
+    INHERIT += "rm_work"
+    PACKAGE_CLASSES ?= "package_ipk"
+    INIT_MANAGER = "systemd"
+    IMAGE_FSTYPES += "ext4"
+    EXTRA_IMAGE_FEATURES = "debug-tweaks ssh-server-openssh"
+    IMAGE_INSTALL:append = " openssh-sftp-server vim"
+    ACCEPT_FSL_EULA = "1"
+
+    # Pas de Mender ici, kernel + dtb natifs pour imx8mp-evk QEMU
+    KERNEL_DEVICETREE = "imx8mp-evk.dtb"
+
+    IMAGE_CLASSES += "qemuboot"
+    SERIAL_CONSOLE = "115200 ttyAMA0"
+    KERNEL_SERIAL_CONSOLE = "console=ttyAMA0,115200n8"

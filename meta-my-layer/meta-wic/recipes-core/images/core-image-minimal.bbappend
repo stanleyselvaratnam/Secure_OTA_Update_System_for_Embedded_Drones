@@ -1,18 +1,10 @@
-# meta-my-layer/meta-wic/recipes-core/images/core-image-minimal.bbappend
+# Utiliser ton fichier WKS pour générer l'image finale
+WKS_FILE = "imx8mp-custom.wks"
 
-IMAGE_FSTYPES += "wic wic.bz2 sdimg"
+# Indique à Yocto où chercher le .wks
+WKS_FILES_PATHS:append = " ${LAYERDIR}/wic"
 
-# Vérifie le nom du wks :
-WKS_FILE = "custom-qemuarm64.wks.in"
-WKS_FILE_DEPENDS += "virtual/kernel"
+# Type d'image à produire
+IMAGE_FSTYPES += "wic.gz"
 
-# Optionnel : assure que wic voie ces variables
-WICVARS += "IMAGE_BOOT_FILES_label-kernelA IMAGE_BOOT_FILES_label-kernelB"
-
-# Ces variables doivent correspondre aux labels EXACTS de ton .wks.in :
-IMAGE_BOOT_FILES_label-kernelA = "Image"
-IMAGE_BOOT_FILES_label-kernelB = "Image"
-
-# Si tu veux un bootloader EFI générique pour QEMU :
-IMAGE_BOOT_FILES = "grub-efi-bootaa64.efi"
-
+IMAGE_NAME_SUFFIX = "-imx8mp-custom"
