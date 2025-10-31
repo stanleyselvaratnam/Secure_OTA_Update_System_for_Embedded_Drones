@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Ajouter les partitions de l'image
-sudo kpartx -av ../build-rpi4/tmp/deploy/images/raspberrypi4-64/core-image-minimal-raspberrypi4-64.sdimg
+sudo kpartx -av ../build-rpi4/tmp/deploy/images/raspberrypi4-64/core-image-base-raspberrypi4-64.gptimg
 
 # Monter chaque partition et lister son contenu
 for part in /dev/mapper/loop0p*; do
