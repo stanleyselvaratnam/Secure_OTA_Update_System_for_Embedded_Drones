@@ -86,10 +86,10 @@ repos:
     layers:
       meta-mender-core:
 
-  # meta-my-layer:
-  #   path: "meta-my-layer"
-  #   layers:
-  #     meta-mender-toradex-nxp:
+  meta-my-layer:
+    path: "meta-my-layer"
+    layers:
+      meta-wic:
 
 
 build_system: oe
@@ -127,7 +127,7 @@ local_conf_header:
     # IMAGE_FSTYPES:remove = " teziimg"
 
     IMAGE_FSTYPES += "wic"
-    # WKS_FILE = "imx-uboot.wks"
+    WKS_FILE = "imx8mp-custom"
     # UBOOT_BINARY = "u-boot-sd-2024.07-r0.bin"
 
 
