@@ -28,3 +28,51 @@
 [submodule "layers/meta-secure-core"]
 	path = layers/meta-secure-core
 	url = https://github.com/Wind-River/meta-secure-core.git
+[submodule "meta-arm"]
+	path = meta-arm
+	url = ./meta-arm
+[submodule "meta-ti"]
+	path = meta-ti
+	url = ./meta-ti
+[submodule "meta-toradex-ti"]
+	path = meta-toradex-ti
+	url = ./meta-toradex-ti
+[submodule "meta-toradex-tezi"]
+	path = meta-toradex-tezi
+	url = ./meta-toradex-tezi
+[submodule "meta-freescale"]
+	path = meta-freescale
+	url = ./meta-freescale
+[submodule "meta-qt5"]
+	path = meta-qt5
+	url = ./meta-qt5
+[submodule "meta-security"]
+	path = meta-security
+	url = ./meta-security
+[submodule "meta-freescale-distro"]
+	path = meta-freescale-distro
+	url = ./meta-freescale-distro
+[submodule "meta-freescale-3rdparty"]
+	path = meta-freescale-3rdparty
+	url = ./meta-freescale-3rdparty
+[submodule "meta-toradex-bsp-common"]
+	path = meta-toradex-bsp-common
+	url = ./meta-toradex-bsp-common
+[submodule "meta-toradex-nxp"]
+	path = meta-toradex-nxp
+	url = ./meta-toradex-nxp
+[submodule "meta-toradex-distro"]
+	path = meta-toradex-distro
+	url = ./meta-toradex-distro
+[submodule "meta-toradex-demos"]
+	path = meta-toradex-demos
+	url = ./meta-toradex-demos
+[submodule "meta-toradex-security"]
+	path = meta-toradex-security
+	url = ./meta-toradex-security
+[submodule "meta-lts-mixins"]
+	path = meta-lts-mixins
+	url = ./meta-lts-mixins
+[submodule "meta-mender-kernel"]
+	path = meta-mender-kernel
+	url = ./meta-mender-kernel
