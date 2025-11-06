@@ -179,7 +179,7 @@ local_conf_header:
     MENDER_FEATURES_ENABLE:append = " mender-image-gpt mender-uboot"
     MENDER_FEATURES_DISABLE:append = " mender-grub mender-image-uefi"
     # ! Enable automatic U-Boot configuration for partitions
-    MENDER_UBOOT_AUTO_CONFIGURE = "1"
+    # MENDER_UBOOT_AUTO_CONFIGURE = "1"
 
     # # Polling intervals (empty = default)
     # # MENDER_UPDATE_POLL_INTERVAL_SECONDS = ""
@@ -218,6 +218,12 @@ local_conf_header:
     # UBOOT_MACHINE = "verdin-imx8mp"
     UBOOT_CONFIG_BASENAME = "verdin-imx8mp"
     # CORE_IMAGE_EXTRA_INSTALL += "firmware-imx"
+
+    # IMAGE_BOOT_FILES:remove = "boot.scr-${MACHINE};boot.scr"
+    # IMAGE_BOOT_FILES:append = " boot.scr-${MACHINE}-1.1-r0;boot.scr"
+
+    IMAGE_BOOT_FILES:remove = "boot.scr-${MACHINE};boot.scr"
+    IMAGE_BOOT_FILES:append = " boot.scr"
 
     IMAGE_CLASSES += "image_type_tezi"
     # IMAGE_FSTYPES:append = " mender_tezi"
