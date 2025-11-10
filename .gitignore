@@ -4,6 +4,7 @@ build-rpi4/
 build-rpi4-encrypted/
 build-imx8mp/
 build-imx8mp-evk/
+build-imx8mp-kirkstone/
 sstate-cache/
 downloads/
 tmp/
