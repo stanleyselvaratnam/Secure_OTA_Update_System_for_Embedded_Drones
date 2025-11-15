@@ -101,10 +101,10 @@ repos:
   #   refspec: "scarthgap-7.x.y"
 
   meta-mender-community:
-    url: "https://github.com/mendersoftware/meta-mender-community.git"
-    refspec: "scarthgap"
+    url: "https://github.com/TheYoctoJester/meta-mender-community.git"
+    refspec: "toradex-wip"
     layers:
-      meta-mender-nxp:
+      meta-mender-toradex-nxp:
       # meta-mender-update-modules:
   
   meta-mender:
@@ -126,6 +126,7 @@ repos:
       meta-wic:
       meta-local:
       meta-connectivity:
+      meta-custom-u-boot:
       # meta-mender-toradex-nxp:
 
 
@@ -171,7 +172,8 @@ local_conf_header:
     # * ================================================================
 
     INHERIT += "mender-full"
-
+    TORADEX_BSP_VERSION = "toradex-bsp-7.1.0"
+    # Désactiver le patch Mender sur u-boot-distro-boot
 
     PREFERRED_PROVIDER_u-boot = "u-boot-mender"
     PREFERRED_PROVIDER_u-boot-fw-utils = "u-boot-fw-utils-mender"
@@ -275,13 +277,23 @@ local_conf_header:
 
     # IMAGE_BOOT_FILES:remove = "boot.scr-${MACHINE};boot.scr"
     # IMAGE_BOOT_FILES:append = " boot.scr"
+    # MENDER_IMAGE_BOOTLOADER_BOOTSECTOR_OFFSET = "0"
 
-    # IMAGE_CLASSES += "image_type_tezi"
-    # # IMAGE_FSTYPES:append = " mender_tezi"
+    # INHERIT += "mender-toradex"
+    # IMAGE_CLASSES += "image_type_mender_tezi"
+    # IMAGE_FSTYPES:append = " mender_tezi"
+    # # IMAGE_FSTYPES:remove = " teziimg"
     # IMAGE_FSTYPES:remove = " tezirunimg"
 
     # # IMAGE_CLASSES:remove = "image_type_tezi"
     # # IMAGE_FSTYPES:remove = "tezi teziimg"
+
+    # * ================================================================
+    # * Custom U-Boot
+    # * ================================================================
+
+    # IMAGE_INSTALL:append = " u-boot-custom-script"
+
 
     # ? ================================================================
     # ? Build performance tuning
