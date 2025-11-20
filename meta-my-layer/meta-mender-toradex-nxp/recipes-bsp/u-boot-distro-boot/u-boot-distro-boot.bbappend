@@ -1,4 +1,3 @@
-# Forcer le chemin patches avec version BSP 6.2.0
-FILESEXTRAPATHS:prepend := "${THISDIR}/files:${THISDIR}/files/toradex-bsp-6.2.0:"
+FILESEXTRAPATHS:prepend:mender-uboot := "${THISDIR}/files:${THISDIR}/files/${TORADEX_BSP_VERSION}:"
 
-SRC_URI += "file://0001-Adapt-boot.cmd.in-to-Mender.patch"
+SRC_URI += "file://0001-Adapt-boot.cmd.in-to-Mender.patch;patchdir=${WORKDIR};striplevel=0"
