@@ -1,3 +1,85 @@
+# Travail Master — Yocto Project with OTA Updates
+
+## Introduction
+
+This project is part of the Master’s thesis and focuses on building a complete embedded Linux system using the Yocto Project. The system is designed to run on multiple hardware platforms:
+
+* QEMU ARM64 (emulated environment)
+* Raspberry Pi 4
+* Toradex Verdin iMX8MP
+
+The main objective is to establish a reproducible build environment and validate system images across various platforms.
+The project also aims to integrate a robust OTA update mechanism using Mender to ensure long-term maintainability of the embedded system.
+
+---
+
+## Docker Environment
+
+The project uses a container based on:
+`FROM crops/yocto:ubuntu-22.04-base`
+
+Example command to start the Docker environment:
+
+```bash
+docker run --rm -it -v ~/Documents/TM/yocto:/workdir testyocto --workdir=/workdir
+```
+
+This container includes all required tools for building Yocto images.
+
+---
+
+## Building the Different Platforms
+
+The project supports Yocto builds for three platforms. Each platform is built using a dedicated `kas` configuration file.
+
+### 1. QEMU ARM64
+
+Used for initial tests and validation in a controlled environment.
+
+Example build command:
+
+```bash
+KAS_BUILD_DIR=build-arm64 kas build kas_qemuarm64.yml
+```
+
+### 2. Raspberry Pi 4
+
+Used as a real hardware test platform to validate OTA updates with Mender.
+
+Example build command:
+
+```bash
+KAS_BUILD_DIR=build-rpi4 kas build kas_rpi.yml
+```
+
+### 3. Toradex Verdin iMX8MP
+
+The final target platform for the drone system used by Rega.
+Tests include integrating Mender and managing the bootloader.
+
+Example build command:
+
+```bash
+KAS_BUILD_DIR=build-imx8mp kas build kas_imx8mp.yml
+```
+
+---
+
+## OTA Update Objective
+
+The project integrates Mender to provide a reliable OTA update mechanism with:
+
+* A/B partition-based rollback
+* Robust update handling suitable for embedded systems
+
+Advanced security features (such as Secure Boot or full disk encryption) are not part of the current project phase and will be addressed later.
+
+---
+
+## Yocto Layers and Commit References
+
+Below is the complete list of Yocto layers used in the project, including their branches and exact commit references, to ensure full reproducibility of the builds:
+
 ```bash
 meta-arm:
   Branch: scarthgap
@@ -104,5 +186,4 @@ meta-poky:
 meta-yocto-bsp:
   Branch: scarthgap
   Commit: b33a8abe77081a2bdda0d89c61736473b2f9bb8b
-
 ```
