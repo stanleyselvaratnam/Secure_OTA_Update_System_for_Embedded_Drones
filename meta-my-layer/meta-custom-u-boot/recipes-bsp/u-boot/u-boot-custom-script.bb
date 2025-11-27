@@ -15,7 +15,7 @@ do_compile() {
 do_deploy() {
     # Génère le boot-loader.scr dans le dossier de déploiement
     mkimage -A arm64 -T script -C none -n "Custom Boot Script" -d boot.cmd boot-loader.scr
-    install -m 0644 boot-loader.scr ${DEPLOYDIR}/boot-loader.scr
+    install -m 0644 boot-loader.scr ${DEPLOY_DIR_IMAGE}/boot-loader.scr
 }
 
 addtask deploy after do_compile before do_build
