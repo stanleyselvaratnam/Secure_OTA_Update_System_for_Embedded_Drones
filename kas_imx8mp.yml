@@ -144,7 +144,7 @@ local_conf_header:
     IMAGE_FSTYPES += "ext4"
     EXTRA_IMAGE_FEATURES = "debug-tweaks"
     IMAGE_INSTALL:remove = "packagegroup-basic"
-    IMAGE_INSTALL:append = " packagegroup-core-ssh-openssh openssh-sftp-server vim"
+    IMAGE_INSTALL:append = " packagegroup-core-ssh-openssh openssh-sftp-server vim nano"
     DISTRO_FEATURES:remove = "ssh-server-dropbear"
     IMAGE_INSTALL:remove = "dropbear"
     ACCEPT_FSL_EULA = "1"
@@ -170,7 +170,7 @@ local_conf_header:
     PREFERRED_PROVIDER_u-boot-fw-utils = "u-boot-fw-utils-mender"
 
     # Name of the Mender artifact
-    MENDER_ARTIFACT_NAME = "release-dev"
+    MENDER_ARTIFACT_NAME = "release-ro"
 
     # # Mender server URL and tenant token
     # MENDER_SERVER_URL = "https://eu.hosted.mender.io"
@@ -318,6 +318,8 @@ local_conf_header:
     # * ================================================================
     # * Security
     # * ================================================================
+    IMAGE_FEATURES += "read-only-rootfs"
+
     # INHERIT += "tdxref-signed"
     # TDX_IMX_HAB_ENABLE = "0"
     # INITRAMFS_IMAGE = "tdx-reference-ramdisk-image"
