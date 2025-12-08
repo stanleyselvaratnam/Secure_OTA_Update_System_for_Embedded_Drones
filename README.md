@@ -179,11 +179,11 @@ meta-toradex-ti:
   Commit: 699cbb557f3c5e57dbdffa2c2023993ee081cf07
 meta:
   Branch: scarthgap
-  Commit: b33a8abe77081a2bdda0d89c61736473b2f9bb8b
+  Commit: 9497778a4d756daa29c4fa8d45d1a242d63ab8cc
 meta-poky:
   Branch: scarthgap
-  Commit: b33a8abe77081a2bdda0d89c61736473b2f9bb8b
+  Commit: 9497778a4d756daa29c4fa8d45d1a242d63ab8cc
 meta-yocto-bsp:
   Branch: scarthgap
-  Commit: b33a8abe77081a2bdda0d89c61736473b2f9bb8b
+  Commit: 9497778a4d756daa29c4fa8d45d1a242d63ab8cc
 ```
