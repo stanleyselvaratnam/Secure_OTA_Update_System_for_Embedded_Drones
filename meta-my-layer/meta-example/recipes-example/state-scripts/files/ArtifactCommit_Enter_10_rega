@@ -1,0 +1,27 @@
+#!/bin/sh
+# REGA – Validation post-update (tests basiques mais toujours OK en dev)
+
+>&2 echo "[REGA] === ArtifactCommit_Enter_10_rega ==="
+>&2 echo "[REGA] Vérifications post-update avant COMMIT"
+
+# Vérifie que le client Mender tourne toujours (processus)
+MENDER_PROC=`ps | grep mender-update | grep -v grep | awk '{print $1}'`
+if [ -n "$MENDER_PROC" ]; then
+    >&2 echo "[REGA] mender-update est actif (PID ${MENDER_PROC})"
+else
+    >&2 echo "[REGA] AVERTISSEMENT: mender-update non détecté (en dev, on continue)"
+fi
+
+# Vérifie qu’un binaire critique existe (exemple: /usr/bin/fw_printenv ou autre)
+if [ -x /usr/bin/fw_printenv ]; then
+    >&2 echo "[REGA] Binaire critique présent: /usr/bin/fw_printenv"
+else
+    >&2 echo "[REGA] AVERTISSEMENT: /usr/bin/fw_printenv absent (OK en dev)"
+fi
+
+# Log version kernel pour tracer la version post-update
+KVER=`uname -r 2>/dev/null || echo "unknown"`
+>&2 echo "[REGA] Kernel post-update: ${KVER}"
+
+>&2 echo "[REGA] COMMIT autorisé (scénario dev, aucun blocage)"
+exit 0

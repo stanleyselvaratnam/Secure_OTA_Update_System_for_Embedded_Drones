@@ -1,0 +1,17 @@
+#!/bin/sh
+# REGA – Début téléchargement : log CPU et mémoire
+
+>&2 echo "[REGA] === Download_Enter_05_rega ==="
+>&2 echo "[REGA] Début du téléchargement de l’update OTA"
+
+# Infos CPU simples
+CPU_MODEL=`grep -m1 'model name' /proc/cpuinfo 2>/dev/null | cut -d':' -f2`
+[ -z "$CPU_MODEL" ] && CPU_MODEL="unknown"
+>&2 echo "[REGA] CPU: ${CPU_MODEL}"
+
+# Mémoire libre (approx) via /proc/meminfo
+MEMFREE=`grep -m1 'MemFree' /proc/meminfo 2>/dev/null | awk '{print $2}'`
+[ -z "$MEMFREE" ] && MEMFREE="0"
+>&2 echo "[REGA] MemFree: ${MEMFREE} kB"
+
+exit 0

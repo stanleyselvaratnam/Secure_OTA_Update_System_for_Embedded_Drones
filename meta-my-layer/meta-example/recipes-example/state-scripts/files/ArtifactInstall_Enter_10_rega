@@ -1,0 +1,23 @@
+#!/bin/sh
+# REGA – Sanity check léger pré-installation (toujours OK en dev)
+
+>&2 echo "[REGA] === ArtifactInstall_Enter_10_rega ==="
+>&2 echo "[REGA] Vérifications pré-installation (version dev, non bloquante)"
+
+# "Batterie" simulée : si pas de BAT*, on force 100%
+BAT=`cat /sys/class/power_supply/BAT*/capacity 2>/dev/null | head -n 1`
+if [ -z "$BAT" ]; then
+    BAT=100
+fi
+>&2 echo "[REGA] Batterie simulée: ${BAT}%"
+
+# Vérif très simple que rootfs actuel est booté depuis eMMC (exemple générique)
+ROOT_DEV=`mount | grep ' / ' | awk '{print $1}'`
+>&2 echo "[REGA] Rootfs monté sur: ${ROOT_DEV}"
+
+# Simu GPS: on log juste une valeur fixe
+GPS_FIX="0"
+>&2 echo "[REGA] GPS Fix (simulé): ${GPS_FIX}"
+
+>&2 echo "[REGA] Toutes les vérifications (dev) sont OK – installation autorisée"
+exit 0

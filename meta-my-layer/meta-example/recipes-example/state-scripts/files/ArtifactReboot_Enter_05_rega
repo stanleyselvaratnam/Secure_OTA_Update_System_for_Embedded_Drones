@@ -1,0 +1,14 @@
+#!/bin/sh
+# REGA – Juste avant le reboot : log et simulation de supervision
+
+>&2 echo "[REGA] === ArtifactReboot_Enter_05_rega ==="
+>&2 echo "[REGA] Pré-reboot : point critique de la mise à jour"
+
+# Log horodaté simple
+NOW=`date 2>/dev/null || echo "no-date"`
+>&2 echo "[REGA] Date/heure: ${NOW}"
+
+# Simule une notification à un système de supervision sans dépendances
+>&2 echo "[REGA] (simulation) Notification envoyée au système de supervision OTA"
+
+exit 0

@@ -122,6 +122,7 @@ repos:
       meta-mender-imx:
       meta-imx-firmware:
       meta-crypto:
+      meta-example:
       # meta-rollback:
 
 build_system: oe
@@ -158,8 +159,6 @@ local_conf_header:
 
     IMAGE_FSTYPES += "wic"
     WKS_FILE = "imx8mp-custom"
-    # UBOOT_BINARY = "u-boot-sd-2024.07-r0.bin"
-
 
     # * ================================================================
     # * Mender configuration (meta-mender-core)
@@ -173,7 +172,7 @@ local_conf_header:
     PREFERRED_PROVIDER_u-boot-fw-utils = "u-boot-fw-utils-mender"
 
     # Name of the Mender artifact
-    MENDER_ARTIFACT_NAME = "release-ro"
+    MENDER_ARTIFACT_NAME = "release-curl"
 
     # # Mender server URL and tenant token
     # MENDER_SERVER_URL = "https://eu.hosted.mender.io"
@@ -223,7 +222,8 @@ local_conf_header:
     IMAGE_INSTALL:append = " wget"
     # Add tcpdump to capture network traffic for TLS verification
     IMAGE_INSTALL:append = " tcpdump"
-
+    IMAGE_INSTALL:append = " state-scripts"
+    IMAGE_INSTALL:append = " curl"
 
 
 
@@ -321,7 +321,7 @@ local_conf_header:
     # * ================================================================
     # * Security
     # * ================================================================
-    IMAGE_FEATURES += "read-only-rootfs"
+    # IMAGE_FEATURES += "read-only-rootfs"
 
     # INHERIT += "tdxref-signed"
     # TDX_IMX_HAB_ENABLE = "0"

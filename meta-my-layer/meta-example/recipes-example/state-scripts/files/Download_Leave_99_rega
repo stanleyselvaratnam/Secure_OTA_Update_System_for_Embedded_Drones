@@ -1,0 +1,20 @@
+#!/bin/sh
+# REGA – Fin téléchargement : log taille artefact + backup léger
+
+>&2 echo "[REGA] === Download_Leave_99_rega ==="
+>&2 echo "[REGA] Fin du téléchargement, vérification du stockage"
+
+# Espace disque sur /
+DISK_ROOT=`df -h / 2>/dev/null | tail -n 1`
+>&2 echo "[REGA] df -h / : ${DISK_ROOT}"
+
+# Backup léger (si fichier existe, sinon noop)
+if [ -f /var/log/messages ]; then
+    cp /var/log/messages /data/messages_preupdate.log 2>/dev/null || true
+    SIZE=`ls -lh /data/messages_preupdate.log 2>/dev/null | awk '{print $5}'`
+    >&2 echo "[REGA] Backup messages_preupdate.log: ${SIZE}"
+else
+    >&2 echo "[REGA] Aucun /var/log/messages à sauvegarder (OK en dev)"
+fi
+
+exit 0
