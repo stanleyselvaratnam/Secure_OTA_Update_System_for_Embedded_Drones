@@ -6,6 +6,9 @@ SRC_URI:append = " \
 "
 
 do_install:append() {
+    # Create the folder for securedata partition
+    install -d ${D}/mnt/securedata
+
     # Install crypttab
     install -d ${D}${sysconfdir}
     install -m 0644 ${WORKDIR}/crypttab ${D}${sysconfdir}/crypttab

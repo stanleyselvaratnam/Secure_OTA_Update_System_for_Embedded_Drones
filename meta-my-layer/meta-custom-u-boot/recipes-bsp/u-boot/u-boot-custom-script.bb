@@ -1,3 +1,12 @@
+# ==============================================================================
+# Project : Secure Embedded Linux OTA System (REGA)
+# File    : u-boot-custom-script.bb
+# Author  : Stanley Selvaratnam
+# Target  : Toradex Verdin iMX8MP
+# Yocto   : Custom layer / recipe
+# Email   : stanley.selvaratnam@gmail.com
+# ==============================================================================
+
 SUMMARY = "Generate boot-loader.scr from boot.cmd.in"
 LICENSE = "CLOSED"
 
@@ -8,12 +17,12 @@ DEPENDS = "u-boot-mkimage-native"
 inherit deploy
 
 do_compile() {
-    # Copie le fichier source (tu peux ajouter sed pour des substitutions si nécessaire)
+    # Copy source file (add sed substitutions if needed)
     cp ${WORKDIR}/boot.cmd.in boot.cmd
 }
 
 do_deploy() {
-    # Génère le boot-loader.scr dans le dossier de déploiement
+    # Generate boot-loader.scr for deployment
     mkimage -A arm64 -T script -C none -n "Custom Boot Script" -d boot.cmd boot-loader.scr
     install -m 0644 boot-loader.scr ${DEPLOY_DIR_IMAGE}/boot-loader.scr
 }

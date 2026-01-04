@@ -1,3 +1,12 @@
+# ==============================================================================
+# Project : Secure Embedded Linux OTA System (REGA)
+# File    : state-scripts.bb
+# Author  : Stanley Selvaratnam
+# Target  : Toradex Verdin iMX8MP
+# Yocto   : Custom layer / recipe
+# Email   : stanley.selvaratnam@gmail.com
+# ==============================================================================
+
 LICENSE = "CLOSED"
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
@@ -9,14 +18,14 @@ SRC_URI = "file://Download_Enter_05_rega \
 
 inherit mender-state-scripts
 
-# Scripts Artifact : dans /var/lib/mender/scripts (comme avant)
+# Artifact scripts: deploy to /var/lib/mender/scripts
 do_compile() {
     cp ${WORKDIR}/ArtifactInstall_Enter_10_rega ${MENDER_STATE_SCRIPTS_DIR}/ArtifactInstall_Enter_10_rega
     cp ${WORKDIR}/ArtifactReboot_Enter_05_rega  ${MENDER_STATE_SCRIPTS_DIR}/ArtifactReboot_Enter_05_rega
     cp ${WORKDIR}/ArtifactCommit_Enter_10_rega  ${MENDER_STATE_SCRIPTS_DIR}/ArtifactCommit_Enter_10_rega
 }
 
-# Scripts Download : rootfs scripts → /etc/mender/scripts
+# Download scripts: install to rootfs /etc/mender/scripts
 do_install() {
     install -d ${D}/etc/mender/scripts
     install -m 0755 ${WORKDIR}/Download_Enter_05_rega  ${D}/etc/mender/scripts/Download_Enter_05_rega

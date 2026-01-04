@@ -1,11 +1,14 @@
 # ==============================================================================
 # Project : Secure Embedded Linux OTA System (REGA)
-# File    : binutils_2.42.bbappend
+# File    : linux-toradex_%.bbappend
 # Author  : Stanley Selvaratnam
-# Target  : Raspberry Pi 4 Model B
+# Target  : Toradex Verdin iMX8MP
 # Yocto   : Custom layer / recipe
 # Email   : stanley.selvaratnam@gmail.com
 # ==============================================================================
 
-# Disable gold and gprofng to prevent crashes on aarch64
-EXTRA_OECONF:append:armv8a = " --disable-gold --disable-gprofng"
+# Prepend path to custom kernel configuration files
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
+
+# Add dm-crypt kernel configuration for LUKS support
+SRC_URI += "file://dm-crypt.cfg"

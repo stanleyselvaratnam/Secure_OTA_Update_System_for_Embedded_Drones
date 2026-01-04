@@ -1,3 +1,12 @@
+# ==============================================================================
+# Project : Secure Embedded Linux OTA System (REGA)
+# File    : u-boot-toradex.bbappend
+# Author  : Stanley Selvaratnam
+# Target  : Toradex Verdin iMX8MP
+# Yocto   : Custom layer / recipe
+# Email   : stanley.selvaratnam@gmail.com
+# ==============================================================================
+
 FILESEXTRAPATHS:prepend:mender-uboot := "${THISDIR}/files:${THISDIR}/files/${TORADEX_BSP_VERSION}:"
 
 include ${@mender_feature_is_enabled("mender-uboot","recipes-bsp/u-boot/u-boot-mender.inc","",d)}

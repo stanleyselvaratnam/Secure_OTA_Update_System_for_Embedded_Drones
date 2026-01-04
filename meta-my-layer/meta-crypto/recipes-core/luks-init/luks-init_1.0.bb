@@ -1,3 +1,12 @@
+# ==============================================================================
+# Project : Secure Embedded Linux OTA System (REGA)
+# File    : luks-init_1.0.bb
+# Author  : Stanley Selvaratnam
+# Target  : Toradex Verdin iMX8MP
+# Yocto   : Custom layer / recipe
+# Email   : stanley.selvaratnam@gmail.com
+# ==============================================================================
+
 SUMMARY = "LUKS initialization script for secure data partition"
 DESCRIPTION = "Initializes and mounts LUKS encrypted partition on first boot"
 LICENSE = "MIT"
@@ -16,9 +25,11 @@ SYSTEMD_SERVICE:${PN} = "luks-init.service"
 SYSTEMD_AUTO_ENABLE:${PN} = "enable"
 
 do_install() {
+    # Install LUKS initialization script
     install -d ${D}${sbindir}
     install -m 0755 ${WORKDIR}/luks-init.sh ${D}${sbindir}/luks-init
 
+    # Install systemd service
     install -d ${D}${systemd_system_unitdir}
     install -m 0644 ${WORKDIR}/luks-init.service ${D}${systemd_system_unitdir}/
 }

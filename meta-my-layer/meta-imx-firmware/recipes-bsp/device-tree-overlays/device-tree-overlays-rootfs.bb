@@ -1,16 +1,23 @@
-SUMMARY = "Copie overlays et overlays.txt depuis le dossier deploy vers /boot du rootfs"
+# ==============================================================================
+# Project : Secure Embedded Linux OTA System (REGA)
+# File    : device-tree-overlays-rootfs.bb
+# Author  : Stanley Selvaratnam
+# Target  : Toradex Verdin iMX8MP
+# Yocto   : Custom layer / recipe
+# Email   : stanley.selvaratnam@gmail.com
+# ==============================================================================
+
+SUMMARY = "Copy overlays and overlays.txt from deploy to rootfs /boot"
 LICENSE = "CLOSED"
 
-# Pas besoin de mettre overlays.txt dans SRC_URI puisqu'on le prend aussi depuis deploy
-
 do_install() {
-    # Création du dossier overlays dans /boot du rootfs
+    # Create overlays directory in rootfs /boot
     install -d ${D}/boot/overlays
 
-    # Copier overlays.txt depuis le dossier deploy
+    # Copy overlays.txt from deploy directory
     install -m 0644 ${DEPLOY_DIR_IMAGE}/overlays.txt ${D}/boot/
 
-    # Copier tout le contenu du dossier overlays depuis deploy vers /boot/overlays
+    # Copy all overlays from deploy to rootfs /boot/overlays
     cp -r ${DEPLOY_DIR_IMAGE}/overlays/* ${D}/boot/overlays/
 }
 

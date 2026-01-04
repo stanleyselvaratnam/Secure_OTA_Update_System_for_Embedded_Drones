@@ -1,10 +1,19 @@
+# ==============================================================================
+# Project : Secure Embedded Linux OTA System (REGA)
+# File    : backup-image.bb
+# Author  : Stanley Selvaratnam
+# Target  : Toradex Verdin iMX8MP
+# Yocto   : Custom layer / recipe
+# Email   : stanley.selvaratnam@gmail.com
+# ==============================================================================
+
 DESCRIPTION = "Empty ext4 image for backup partition"
 LICENSE = "CLOSED"
 
-# Taille en MiB
+# Image size in MiB
 BACKUP_IMG_SIZE ?= "512"
 
-# Dépendances nécessaires pour mkfs.ext4
+# Dependencies required for mkfs.ext4
 DEPENDS += "e2fsprogs-native"
 
 do_image() {

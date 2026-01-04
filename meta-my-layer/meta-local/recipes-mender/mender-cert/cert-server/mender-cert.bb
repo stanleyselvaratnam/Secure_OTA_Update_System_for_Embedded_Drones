@@ -1,7 +1,16 @@
+# ==============================================================================
+# Project : Secure Embedded Linux OTA System (REGA)
+# File    : mender-cert.bb
+# Author  : Stanley Selvaratnam
+# Target  : Toradex Verdin iMX8MP
+# Yocto   : Custom layer / recipe
+# Email   : stanley.selvaratnam@gmail.com
+# ==============================================================================
+
 SUMMARY = "Mender server certificate"
 LICENSE = "CLOSED"
 
-# Inclure les fichiers locaux (mender.crt)
+# Include local files (mender.crt)
 FILESEXTRAPATHS:prepend := "${THISDIR}/../files:"
 
 SRC_URI = "file://mender.crt"
