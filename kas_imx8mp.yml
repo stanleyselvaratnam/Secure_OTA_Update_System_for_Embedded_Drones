@@ -1,9 +1,18 @@
-# ! KAS_BUILD_DIR=build-imx8mp kas build kas_imx8mp.yml
+# ==============================================================================
+# Project : Secure Embedded Linux OTA System (REGA)
+# File    : kas_imx8mp.yml
+# Author  : Stanley Selvaratnam
+# Target  : Toradex Verdin iMX8MP
+# Yocto   : Scarthgap (7.x)
+# Email   : stanley.selvaratnam@gmail.com
+# ! Build command: KAS_BUILD_DIR=build-imx8mp kas build kas_imx8mp.yml
+# ==============================================================================
+
 
 header:
   version: 11
 
-# Définition des dépôts à cloner et des layers à activer
+# Repository definitions and layers to enable
 repos:
   poky:
     url: "https://git.yoctoproject.org/poky.git"
@@ -111,8 +120,8 @@ repos:
     layers:
       meta-key:
 
-  meta-my-layer:
-    path: "meta-my-layer"
+  meta-imx8mp-rega:
+    path: "meta-imx8mp-rega"
     layers:
       meta-mender-toradex-nxp:
       meta-wic:
@@ -121,7 +130,7 @@ repos:
       meta-custom-u-boot:
       meta-mender-imx:
       meta-imx-firmware:
-      meta-crypto:
+      # meta-crypto:
       meta-example:
       # meta-rollback:
 
@@ -139,18 +148,24 @@ env:
 
 local_conf_header:
   my-config: |
+
+    # ================================================================
+    # General Build Configuration
+    # ================================================================
+
     INHERIT += "rm_work"
     PACKAGE_CLASSES ?= "package_ipk"
     INIT_MANAGER = "systemd"
     IMAGE_FSTYPES += "ext4"
+    ACCEPT_FSL_EULA = "1"
+
+
     EXTRA_IMAGE_FEATURES = "debug-tweaks"
     IMAGE_INSTALL:remove = "packagegroup-basic"
     IMAGE_INSTALL:append = " packagegroup-core-ssh-openssh openssh-sftp-server vim nano"
     DISTRO_FEATURES:remove = "ssh-server-dropbear"
     IMAGE_INSTALL:remove = "dropbear"
-    ACCEPT_FSL_EULA = "1"
-
-    INHERIT += "vex"
+    
 
     
     # * ================================================================
@@ -161,13 +176,13 @@ local_conf_header:
     WKS_FILE = "imx8mp-custom"
 
     # * ================================================================
-    # * Mender configuration (meta-mender-core)
+    # * Mender OTA Configuration (meta-mender-core)
     # * ================================================================
 
     INHERIT += "mender-full"
     TORADEX_BSP_VERSION = "toradex-bsp-7.1.0"
-    # Désactiver le patch Mender sur u-boot-distro-boot
-
+  
+    # Use Mender-specific U-Boot providers
     PREFERRED_PROVIDER_u-boot = "u-boot-mender"
     PREFERRED_PROVIDER_u-boot-fw-utils = "u-boot-fw-utils-mender"
 
@@ -184,12 +199,13 @@ local_conf_header:
     MENDER_INVENTORY_POLL_INTERVAL_SECONDS = ""
     MENDER_RETRY_POLL_INTERVAL_SECONDS = ""
 
+    # Mender partition definitions (A/B rootfs scheme)
     MENDER_BOOT_PART = "${MENDER_STORAGE_DEVICE_BASE}1"
     MENDER_DATA_PART = "${MENDER_STORAGE_DEVICE_BASE}4"
     MENDER_ROOTFS_PART_A = "${MENDER_STORAGE_DEVICE_BASE}2"
     MENDER_ROOTFS_PART_B = "${MENDER_STORAGE_DEVICE_BASE}3"
 
-    # Device type
+    # Device type compatible with Mender server
     MENDER_DEVICE_TYPE = "imx8mp-verdin"
 
     # Storage device and partition layout
@@ -205,35 +221,28 @@ local_conf_header:
 
     # --- MENDER SIGNING / VERIFY CONFIGURATION ---
 
-    # Clé publique installée par mender-keys.bb
+    # Install public keys provided by mender-keys.bb
     IMAGE_INSTALL:append = " mender-keys mender-keys-rotation"
 
-    # Clé privée utilisée pour signer les artifacts (chemin absolu)
+    # Private key path for signing artifacts (absolute path required)
     MENDER_ARTIFACT_SIGNING_KEY = "${TOPDIR}/../mender-keys/private.key"
 
-    # Clé publique utilisée pour vérifier les artifacts pendant le build
+    # Public key for build-time artifact verification (optional)
     # MENDER_ARTIFACT_VERIFY_KEY  = "${TOPDIR}/../mender-keys/public.key"
 
    
     IMAGE_INSTALL:append = " mender-artifact-info"
 
-    # Intégration TLS
+    # TLS and network tools for Mender integration
     IMAGE_INSTALL:append = " mender-cert"
     IMAGE_INSTALL:append = " wget"
-    # Add tcpdump to capture network traffic for TLS verification
     IMAGE_INSTALL:append = " tcpdump"
+    # Recipes to add state script with tool
     IMAGE_INSTALL:append = " state-scripts"
     IMAGE_INSTALL:append = " curl"
 
-
-
-    # IMAGE_BOOT_FILES += "boot.scr-verdin-imx8mp"
-
-    # UBOOT_CONFIG ??= "sd"
-    # UBOOT_ENV ?= "u-boot-initial-env"
-
     # * ================================================================
-    # * Specific SD chain U-Boot environnement
+    # * U-Boot Specific Configuration for SD Chain
     # * ================================================================
 
     # Forcer l'environnement sur SD
@@ -246,25 +255,19 @@ local_conf_header:
 
 
     # * ================================================================
-    # * Custom U-Boot
+    # * Custom U-Boot Boot Files
     # * ================================================================
 
-    # IMAGE_INSTALL:append = " u-boot-custom-script"
-
     # Clean the boot partition with only the necessary files   
-    # IMAGE_BOOT_FILES:remove = " boot.scr"
     IMAGE_BOOT_FILES:remove = "overlays overlays.txt overlays/*;overlays/"
 
+    # Custom boot files for Verdin iMX8MP
     IMAGE_BOOT_FILES = " \
         boot-loader.scr \
         boot.scr-verdin-imx8mp;my_custom_boot.scr \
         u-boot-verdin-imx8mp.bin \
     "
     IMAGE_INSTALL:append = " device-tree-overlays-rootfs"
-
-    # Désactive le montage automatique de la partition boot dans /uboot
-    # MENDER_BOOT_PART = ""
-
 
     # * ================================================================
     # * ENABLE SSH
@@ -274,6 +277,7 @@ local_conf_header:
     EXTRA_IMAGE_FEATURES ?= "ssh-server-openssh"
     IMAGE_INSTALL:append = " ssh-keys"
 
+    # Set root password to 'password123' (change in production)
     INHERIT += "extrausers"
     EXTRA_USERS_PARAMS = "usermod -p '$(openssl passwd -1 password123)' root;"
 
@@ -286,29 +290,29 @@ local_conf_header:
     # ! ================================================================
     # ! ENCRYPTED PARTITION SETUP
     # ! ================================================================
-    # Mender ne doit plus monter /data automatiquement au boot
+    #  Disable automatic /data mount by Mender
     MENDER_DATA_MOUNT_DISABLED = "1"
 
-    # (Optionnel) Redéfinis la partition /data sur p4
+    # Explicitly set /data to partition 4
     MENDER_DATA_PART = "${MENDER_STORAGE_DEVICE_BASE}4"
     
     # Enable GPT partitioning
     MENDER_FEATURES_ENABLE:append = " mender-image-gpt"
     
-    # Add secure data partition (unformatted)
+    # Add secure data partition (unformatted, 256MB)
     MENDER_EXTRA_PARTS = "securepart"
     MENDER_EXTRA_PARTS[securepart] = "--label=securedata --size=256"
     
     # Install LUKS tools and init script
-    IMAGE_INSTALL:append = " cryptsetup e2fsprogs util-linux lsof luks-init"
+    # IMAGE_INSTALL:append = " cryptsetup e2fsprogs util-linux lsof luks-init"
     
-    # Enable systemd service
+    # Enable systemd (required for encryption services)
     SYSTEMD_AUTO_ENABLE:pn-systemd = "enable"
 
-    # Si besoin d’options fstab automatiques
+    # Optional: Auto fstab options (commented)
     # MENDER_EXTRA_PARTS_FSTAB[securepart] = "auto defaults 0 2"
 
-    # Pour créer les liens symboliques de la partition chiffrée au rootfs
+    # Optional: Symlinks for  files in secure partition
     # IMAGE_INSTALL:append = " secure-symlinks"
 
 
@@ -319,17 +323,44 @@ local_conf_header:
     # IMAGE_INSTALL:append = " remove-kernel-rootfs"
 
     # * ================================================================
-    # * Security
+    # * Security Features (Toradex meta-toradex-security)
     # * ================================================================
-    # IMAGE_FEATURES += "read-only-rootfs"
+        
+    # Enable VEX (Vendor Extension) support
+    INHERIT += "vex"
 
+    IMAGE_FEATURES += "read-only-rootfs"
+
+    # Enable encrypted rootfs and OP-TEE
+    INHERIT += "tdx-encrypted tdx-optee"
+
+    # Use CAAM (Cryptographic Acceleration and Assurance Module) as secure key backend
+    TDX_ENC_KEY_BACKEND = "caam"
+    TDX_ENC_KEY_LOCATION = "filesystem"
+    TDX_ENC_KEY_DIR = "/var/local/keys"
+    TDX_ENC_KEY_FILE = "securedata-key.blob"
+
+    # Encrypted partition mapping (/dev/mmcblk1p5 -> /mnt/securedata)
+    TDX_ENC_STORAGE_LOCATION = "/dev/mmcblk1p5"
+    TDX_ENC_MAPPER_NAME = "securedata"
+    TDX_ENC_MOUNTPOINT = "/mnt/securedata" 
+
+    # Force OP-TEE tests and fTPM (Firmware TPM)
+    TDX_OPTEE_INSTALL_TESTS = "1"
+    TDX_OPTEE_FTPM = "1"
+
+    # Required distro features for security
+    DISTRO_FEATURES:append = " optee tee dm-verity tpm"
+    DISTRO_FEATURES:append = " security"
+
+    # Commented: HAB/secure boot and initramfs options
     # INHERIT += "tdxref-signed"
     # TDX_IMX_HAB_ENABLE = "0"
     # INITRAMFS_IMAGE = "tdx-reference-ramdisk-image"
     # INITRAMFS_IMAGE_NAME = "tdx-reference-ramdisk-image-imx8mp-verdin"
     # KERNEL_IMAGE_NAME = "tdx-reference-ramdisk-image"
 
-    # DISTRO_FEATURES:append = " security"
+    
 
     # * ================================================================
     # * Toradex Easy Installer
