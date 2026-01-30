@@ -10,5 +10,8 @@
 # Prepend path to custom kernel configuration files
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
-# Add dm-crypt kernel configuration for LUKS support
-SRC_URI += "file://dm-crypt.cfg"
+# Add dm-crypt for LUKS and dm-verity for integrity support
+SRC_URI += " \
+    file://dm-crypt.cfg \
+    file://dm-verity.cfg \
+"

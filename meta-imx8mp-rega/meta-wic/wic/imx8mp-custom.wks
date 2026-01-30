@@ -1,15 +1,21 @@
 # imx8mp-custom.wks - adaptatif pour uboot.env, boot, rootfs, persist, backup
 
-part --source rawcopy --sourceparams="file=uboot.env" --ondisk mmcblk1 --align 8192 --no-table
+# Partition 1: U-Boot environment
+part --source rawcopy --sourceparams="file=uboot.env" --ondisk mmcblk1 --align 4096 --no-table
 
-part --source rawcopy --sourceparams="file=/workdir/build-imx8mp/tmp/work/verdin_imx8mp-tdx-linux/tdx-reference-minimal-image/1.0/deploy-tdx-reference-minimal-image-image-complete/Reference-Minimal-Image-imx8mp-verdin.bootimg" --ondisk mmcblk1 --align 8192 --fixed-size 100 --active --label boot --fstype=vfat --part-type EF00
+# Partition 2: Boot partition (kernel FIT + DTBs)
+part --source rawcopy --sourceparams="file=${IMGDEPLOYDIR}/${IMAGE_LINK_NAME}.bootimg" --ondisk mmcblk1 --align 4096 --fixed-size 100M --active --label boot --part-type EF00
 
-part --source rawcopy --sourceparams="file=/workdir/build-imx8mp/tmp/work/verdin_imx8mp-tdx-linux/tdx-reference-minimal-image/1.0/deploy-tdx-reference-minimal-image-image-complete/Reference-Minimal-Image-imx8mp-verdin.ext4" --ondisk mmcblk1 --align 8192 --fixed-size 4000 --label rootfsA --fstype=ext4 --part-type=0FC63DAF-8483-4772-8E79-3D69D8477DE4
+# Partition 3: Rootfs A (avec dm-verity intégré)
+part --source rawcopy --sourceparams="file=${IMGDEPLOYDIR}/${IMAGE_LINK_NAME}.ext4.verity" --ondisk mmcblk1 --align 4096 --part-type=0FC63DAF-8483-4772-8E79-3D69D8477DE4
 
-part --ondisk mmcblk1 --align 8192 --fixed-size 4000 --label rootfsB --fstype=ext4 --part-type=0FC63DAF-8483-4772-8E79-3D69D8477DE4
+# Partition 4: Rootfs B (vide pour A/B updates)
+part --ondisk mmcblk1 --align 4096 --fixed-size 4000M --label rootfsB --part-type=0FC63DAF-8483-4772-8E79-3D69D8477DE4
 
-part --source rawcopy --sourceparams="file=/workdir/build-imx8mp/tmp/work/verdin_imx8mp-tdx-linux/tdx-reference-minimal-image/1.0/deploy-tdx-reference-minimal-image-image-complete/Reference-Minimal-Image-imx8mp-verdin.dataimg" --ondisk mmcblk1 --align 8192 --fixed-size 512 --label persist --fstype=ext4 --part-type=0FC63DAF-8483-4772-8E79-3D69D8477DE4
+# Partition 5: Data persistante
+part --source rawcopy --sourceparams="file=${IMGDEPLOYDIR}/${IMAGE_LINK_NAME}.dataimg" --ondisk mmcblk1 --align 4096 --fixed-size 512M --part-type=0FC63DAF-8483-4772-8E79-3D69D8477DE4
 
-# part --source rawcopy --sourceparams="file=${DEPLOY_DIR_IMAGE}/backup.img" --ondisk mmcblk1 --align 8192 --size 512 --label backup --fstype=ext4 --part-type=0FC63DAF-8483-4772-8E79-3D69D8477DE4
+# Partition 6: Backup
+part --source rawcopy --sourceparams="file=${DEPLOY_DIR_IMAGE}/backup.img" --ondisk mmcblk1 --align 4096 --fixed-size 512M --part-type=0FC63DAF-8483-4772-8E79-3D69D8477DE4
 
 bootloader --ptable gpt

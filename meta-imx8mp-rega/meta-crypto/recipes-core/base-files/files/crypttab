@@ -1,2 +1,0 @@
-# Encrypted partition for secure data
-securedata /dev/mmcblk1p5 /data/lukskey.bin luks
