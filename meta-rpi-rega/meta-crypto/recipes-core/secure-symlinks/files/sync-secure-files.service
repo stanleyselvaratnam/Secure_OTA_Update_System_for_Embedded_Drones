@@ -1,0 +1,12 @@
+[Unit]
+Description=Sync sensitive files to encrypted partition and create symlinks
+After=mnt-securedata.mount
+Requires=mnt-securedata.mount
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/sync-secure-files.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

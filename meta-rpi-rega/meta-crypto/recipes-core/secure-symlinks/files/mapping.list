@@ -1,0 +1,12 @@
+/etc/mender/mender.conf:/mnt/securedata/mender.conf
+/var/lib/mender/device_type:/mnt/securedata/device_type
+/var/lib/mender/mender-agent.pem:/mnt/securedata/mender-agent.pem
+/var/lib/mender/mender-store:/mnt/securedata/mender-store
+/var/lib/mender/mender-store-lock:/mnt/securedata/mender-store-lock
+/var/lib/mender/mender.conf:/mnt/securedata/mender.conf
+
+/data/mender/device_type:/mnt/securedata/device_type
+/data/mender/mender-agent.pem:/mnt/securedata/mender-agent.pem
+/data/mender/mender-store:/mnt/securedata/mender-store
+/data/mender/mender-store-lock:/mnt/securedata/mender-store-lock
+/data/mender/mender.conf:/mnt/securedata/mender.conf

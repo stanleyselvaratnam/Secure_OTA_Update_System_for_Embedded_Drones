@@ -1,0 +1,16 @@
+[Unit]
+Description=Initialize LUKS encrypted partition
+After=network.target syslog.target local-fs.target
+Wants=local-fs.target
+DefaultDependencies=no
+ConditionPathExists=/dev/mmcblk1p5
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/luks-init
+RemainAfterExit=yes
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=sysinit.target
