@@ -13,6 +13,11 @@
     url = https://github.com/mendersoftware/meta-mender.git
     branch = scarthgap
 
+[submodule "meta-mender-kernel"]
+    path = meta-mender-kernel
+    url = https://github.com/coreycothrum/meta-mender-kernel.git
+    branch = scarthgap
+
 [submodule "meta-custom"]
     path = meta-custom
     url = https://github.com/stanleyselvaratnam/meta-custom.git
