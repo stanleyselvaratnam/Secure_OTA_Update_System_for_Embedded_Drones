@@ -1,20 +1,15 @@
 <div align="center">
+
   <span style="font-size: 2.5em; font-weight: bold; display: block; margin-bottom: 0.2em;">
-   Master's Thesis
+    Master’s Thesis
   </span>
   <span style="font-size: 1.5em; font-weight: bold; color: #555; display: block;">
-  Yocto Project with OTA Updates & Secure Embedded Systems
+    Yocto Project with OTA Updates & Secure Embedded Systems
   </span>
 
   <br/>
 
-  <img src="image/icon_drone_rega.png" 
-       alt="Embedded Drone System" 
-       width="400"
-       style="
-         animation: droneFloat 3s ease-in-out infinite;
-         transform-origin: center;
-       ">
+  <img src="image/drone.gif" alt="Embedded Drone System" width="400">
 
   <br/>
 
@@ -36,13 +31,6 @@
     </a>
   </p>
 </div>
-
-<style>
-@keyframes droneFloat {
-  0%, 100% { transform: translateY(10px); }
-  50% { transform: translateY(-10px); }
-}
-</style>
 
 ## Introduction
 
