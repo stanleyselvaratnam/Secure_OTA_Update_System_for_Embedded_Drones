@@ -1,8 +1,12 @@
 <div align="center">
+  <table border="0">
     <tr>
       <td align="center">
         <h1>Master’s Thesis</h1>
-        <h2><font color=615959>Yocto Project with OTA Updates & Secure Embedded Systems</font></h2>
+        <h2><font color="#777777">Yocto Project with OTA Updates & Secure Embedded Systems</font></h2>
+      </td>
+    </tr>
+  </table>
 
   <br/>
 
