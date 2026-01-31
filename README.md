@@ -120,7 +120,7 @@ KAS_BUILD_DIR=build-imx8mp kas build kas_imx8mp.yml
 
 ---
 
-## □ Security & OTA Strategy
+## Security & OTA Strategy
 
 The project implements a high-security standard for embedded systems:
 
