@@ -1,6 +1,6 @@
 <div align="center">
-        <h1>Master’s Thesis</h1>
-        <h2><font color=grey>Yocto Project with OTA Updates & Secure Embedded Systems</font></h2>
+  <h1>Master’s Thesis</h1>
+  <h2><font color=grey>Yocto Project with OTA Updates & Secure Embedded Systems</font></h2>
 
   <br/>
 
@@ -9,26 +9,16 @@
   <br/>
 
   <p align="center">
-    <a href="https://www.yoctoproject.org/">
-      <img src="https://img.shields.io/badge/Yocto-Scarthgap-white?style=for-the-badge&logo=yocto&logoColor=black" alt="Yocto Project">
-    </a>
+    <a href="https://www.yoctoproject.org/"><img src="https://img.shields.io/badge/Yocto-Scarthgap-white?style=for-the-badge&logo=yocto&logoColor=black" alt="Yocto Project"></a>
     &nbsp;
-    <a href="https://www.toradex.com/computer-on-modules/verdin-arm-family/nxp-imx-8m-plus">
-      <img src="https://img.shields.io/badge/Platform-Toradex_iMX8MP-white?style=for-the-badge&logo=linux&logoColor=black" alt="Toradex Verdin">
-    </a>
+    <a href="https://www.toradex.com/computer-on-modules/verdin-arm-family/nxp-imx-8m-plus"><img src="https://img.shields.io/badge/Platform-Toradex_iMX8MP-white?style=for-the-badge&logo=linux&logoColor=black" alt="Toradex Verdin"></a>
     &nbsp;
-    <a href="https://github.com/toradex/meta-toradex-security">
-      <img src="https://img.shields.io/badge/Security-HAB4_|_CAAM-white?style=for-the-badge&logo=lock&logoColor=black" alt="Security Layer">
-    </a>
+    <a href="https://github.com/toradex/meta-toradex-security"><img src="https://img.shields.io/badge/Security-HAB4_|_CAAM-white?style=for-the-badge&logo=lock&logoColor=black" alt="Security Layer"></a>
     &nbsp;
-    <a href="https://mender.io/">
-      <img src="https://img.shields.io/badge/OTA-Mender-white?style=for-the-badge&logo=mender&logoColor=black" alt="Mender OTA">
-    </a>
+    <a href="https://mender.io/"><img src="https://img.shields.io/badge/OTA-Mender-white?style=for-the-badge&logo=mender&logoColor=black" alt="Mender OTA"></a>
     <br/><br/> 
-    <a href="https://heig-vd.ch/recherche/instituts/reds">
-          <img src="https://img.shields.io/badge/Institute-REDS_|_HEIG--VD-white?style=for-the-badge" alt="REDS Institute">
-        </a>
-      </p>
+    <a href="https://heig-vd.ch/recherche/instituts/reds"><img src="https://img.shields.io/badge/Institute-REDS_|_HEIG--VD-white?style=for-the-badge" alt="REDS Institute"></a>
+  </p>
 
   <p><sub>Developed at the <strong>REDS Institute</strong></sub></p>
 </div>
