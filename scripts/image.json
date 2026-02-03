@@ -1,0 +1,38 @@
+{
+    "config_format": "4",
+    "autoinstall": false,
+    "name": "Custom U-Boot OP-TEE",
+    "description": "With imx-boot to have OPTEE and TEE",
+    "version": "7.5.0-devel-20260102135122+build.0",
+    "release_date": "2026-01-04",
+    "u_boot_env": "u-boot-initial-env-sd",
+    "prepare_script": "prepare.sh",
+    "wrapup_script": "wrapup.sh",
+    "marketing": "marketing.tar",
+    "icon": "toradexlinux.png",
+    "license": "LA_OPT_NXP_SW.html",
+    "supported_product_ids": [
+        "0058",
+        "0061",
+        "0063",
+        "0064",
+        "0065",
+        "0066",
+        "0070"
+    ],
+    "blockdevs": [
+        {
+            "name": "emmc-boot0",
+            "erase": true,
+            "content": {
+                "filesystem_type": "raw",
+                "rawfiles": [
+                    {
+                        "filename": "imx-boot",
+                        "dd_options": "seek=0"
+                    }
+                ]
+            }
+        }
+    ]
+}
