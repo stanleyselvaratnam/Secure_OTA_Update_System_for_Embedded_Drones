@@ -122,7 +122,7 @@ The project implements a high-security standard for embedded systems:
 
 * [x] **OTA Updates:** Integrated Mender with **A/B partition-based rollback**.
 * [x] **Secure Boot:** Hardware-rooted trust using NXP HAB4 (High Assurance Boot).
-  * [ ] dm-verity (Verified rootfs for file system integrity) — 🔗 *[Implementation available on `dm-verity` branch](https://github.com/stanleyselvaratnam/Secure_OTA_Update_System_for_Embedded_Drones/tree/dm-verity#)*
+  * [ ] dm-verity (Verified rootfs for file system integrity) - 🔗 *[Implementation available on `dm-verity` branch](https://github.com/stanleyselvaratnam/Secure_OTA_Update_System_for_Embedded_Drones/tree/dm-verity#)*
 * [x] **Data Encryption:** External partition encryption managed via **CAAM** (Cryptographic Acceleration and Assurance Module) for hardware-accelerated security.
 * [x] **Integrity:** All Mender artifacts are digitally signed to ensure image authenticity.
 ---
