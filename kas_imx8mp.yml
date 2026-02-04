@@ -292,9 +292,6 @@ local_conf_header:
 
     # ! ================================================================
     # ! ENCRYPTED PARTITION SETUP
-    # ! ================================================================
-    #  Disable automatic /data mount by Mender
-    MENDER_DATA_MOUNT_DISABLED = "1"
 
     # Explicitly set /data to partition 4
     MENDER_DATA_PART = "${MENDER_STORAGE_DEVICE_BASE}4"
